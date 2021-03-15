@@ -1,0 +1,12 @@
+chart_config:
+  supported_resolutions:
+    - "1"    
+    - "5"
+    - "15"
+    - "30"
+    - "60"
+    - "1D"
+    - "1W"
+    - "1M"
+targeted_timestamp: 0
+sync_interval: 60

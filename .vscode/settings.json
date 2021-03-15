@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "postgres",
+            "driver": "PostgreSQL",
+            "name": "timescaledb",
+            "password": "postgres",
+            "port": 5433,
+            "previewLimit": 50,
+            "server": "localhost",
+            "username": "postgres"
+        }
+    ]
+}
