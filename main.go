@@ -61,7 +61,7 @@ func main() {
 	})
 
 	args := os.Args[1:]
-	port := utils.GetEnv("PORT", "3001")
+	port := utils.GetEnv("PORT", "80")
 	if len(args) > 0 {
 		port = args[0]
 	}
