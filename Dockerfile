@@ -11,4 +11,4 @@ RUN go build -o appbinary
 
 FROM alpine as release
 VOLUME /workspace
-ENTRYPOINT ["/appbinary"]
+ENTRYPOINT ["/go/src/app/appbinary"]

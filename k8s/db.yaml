@@ -59,7 +59,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: timescale/timescaledb
+          image: timescale/timescaledb:latest-pg11
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
