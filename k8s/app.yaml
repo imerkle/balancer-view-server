@@ -19,7 +19,7 @@ spec:
           image: ghcr.io/imerkle/balancer-view:latest
           env:
             - name: POSTGRES_CONN
-              value: "postgres.core.svc"          
+              value: "postgres://postgres:postgres@postgres-service.core.svc.cluster.local:5432/postgres"
           resources:
             requests:
               memory: "32Mi"
@@ -56,7 +56,7 @@ spec:
       http:
         paths:
           - path: /
-            pathType: Prefix          
+            pathType: Prefix
             backend:
               service:
                 name: go-server-service

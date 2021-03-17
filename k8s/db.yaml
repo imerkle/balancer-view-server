@@ -68,9 +68,19 @@ spec:
                 name: postgres-config
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgredb
+              name: postgresdb
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "100m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
       volumes:
-        - name: postgredb
+        - name: postgresdb
           persistentVolumeClaim:
             claimName: postgres-pv-claim
 ---
@@ -78,11 +88,11 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: core
-  name: postgres
+  name: postgres-service
   labels:
     app: postgres
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 5432
   selector:
