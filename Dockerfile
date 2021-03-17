@@ -10,5 +10,6 @@ COPY . ./
 RUN go build -o appbinary
 
 FROM alpine as release
+COPY --from=builder /go/src/appappbinary /appbinary
 VOLUME /workspace
-ENTRYPOINT ["/go/src/app/appbinary"]
+ENTRYPOINT ["/appbinary"]
