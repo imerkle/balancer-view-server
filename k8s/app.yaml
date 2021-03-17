@@ -17,6 +17,9 @@ spec:
       containers:
         - name: go-server
           image: ghcr.io/imerkle/balancer-view:latest
+          env:
+            - name: POSTGRES_CONN
+              value: "postgres.core.svc"          
           resources:
             requests:
               memory: "32Mi"

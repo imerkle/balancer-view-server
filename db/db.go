@@ -18,7 +18,7 @@ func Connect() {
 	connStr := utils.GetEnv("POSTGRES_CONN", defaultPostgresConn)
 	Dbpool, err = pgxpool.Connect(context.Background(), connStr)
 	if err != nil {
-		log.Fatal("Unable to connect to db")
+		log.Fatal("Unable to connect to db %s", connStr)
 	}
 }
 
