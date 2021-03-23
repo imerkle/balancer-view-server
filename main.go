@@ -49,7 +49,7 @@ func main() {
 	}
 
 	syncerGroup := &syncer.SyncerGroup{SyncInterval: yconf.SyncInterval}
-	go syncerGroup.Init()
+	go syncerGroup.Init(yconf.BatchDays)
 
 	// Register http handlers
 	registerHanders(map[string]func(http.ResponseWriter, *http.Request){

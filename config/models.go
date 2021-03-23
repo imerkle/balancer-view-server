@@ -23,6 +23,10 @@ type YamlConfig struct {
 	ChartConfig struct {
 		SupportedResolutions []string `yaml:"supported_resolutions"`
 	} `yaml:"chart_config"`
+	// How often to sync
 	SyncInterval int64 `yaml:"sync_interval"`
-	ResetDb      bool  `yaml:"reset_db"`
+	// 1 day = 1 goroutine per day interval
+	BatchDays bool `yaml:"batch_days"`
+	// Reset db on start, enable only for dev purposes
+	ResetDb bool `yaml:"reset_db"`
 }
