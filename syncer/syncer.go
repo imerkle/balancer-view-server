@@ -52,7 +52,7 @@ var (
 	MajorQuotes = map[string]bool{"USDC": true, "WETH": true}
 )
 
-func (x *SyncerGroup) Init(batchDays int) {
+func (x *SyncerGroup) Init(batchDays int64) {
 	x.BatchSeconds = 60 * 60 * 24 * batchDays //1 week
 	//x.TargetedTimestamp = 1591979848
 	x.TargetedTimestamp = time.Now().UTC().Unix()

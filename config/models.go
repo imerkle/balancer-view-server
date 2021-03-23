@@ -26,7 +26,7 @@ type YamlConfig struct {
 	// How often to sync
 	SyncInterval int64 `yaml:"sync_interval"`
 	// 1 day = 1 goroutine per day interval
-	BatchDays bool `yaml:"batch_days"`
+	BatchDays int64 `yaml:"batch_days"`
 	// Reset db on start, enable only for dev purposes
 	ResetDb bool `yaml:"reset_db"`
 }
