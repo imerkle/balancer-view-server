@@ -269,6 +269,7 @@ func (x *Syncer) CreateBatch() int {
 
 //InsertBatch inserts into db
 func (x *Syncer) InsertBatch() error {
+
 	//send batch to connection pool
 	fmt.Println("Inserting DB BATCH.... ID: ", x.ID)
 	br := db.Dbpool.SendBatch(context.Background(), x.Batch)

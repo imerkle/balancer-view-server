@@ -10,12 +10,12 @@ import (
 )
 
 var Dbpool *pgxpool.Pool
-var defaultPostgresConn = "postgres://postgres:postgres@localhost:5433/postgres?pool_max_conns=100"
+var DefaultPostgresConn = "postgres://postgres:postgres@localhost:5433/postgres?pool_max_conns=100"
 var err error
 var Gqlclient *graphql.Client
 
 func Connect() {
-	connStr := utils.GetEnv("POSTGRES_CONN", defaultPostgresConn)
+	connStr := utils.GetEnv("POSTGRES_CONN", DefaultPostgresConn)
 	Dbpool, err = pgxpool.Connect(context.Background(), connStr)
 	if err != nil {
 		log.Fatal("Unable to connect to db ", connStr)

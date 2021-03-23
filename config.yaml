@@ -9,5 +9,5 @@ chart_config:
     - "1W"
     - "1M"
 sync_interval: 60
-batch_days: 75
-reset_db: false
+batch_days: 100
+reset_db: true
