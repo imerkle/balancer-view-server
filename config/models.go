@@ -23,7 +23,6 @@ type YamlConfig struct {
 	ChartConfig struct {
 		SupportedResolutions []string `yaml:"supported_resolutions"`
 	} `yaml:"chart_config"`
-	//TargetedTimestamp how long to sync set 0 for prod = utcnow
-	TargetedTimestamp int64 `yaml:"targeted_timestamp"`
-	SyncInterval      int64 `yaml:"sync_interval"`
+	SyncInterval int64 `yaml:"sync_interval"`
+	ResetDb      bool  `yaml:"reset_db"`
 }

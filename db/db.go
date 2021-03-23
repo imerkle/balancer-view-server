@@ -10,7 +10,7 @@ import (
 )
 
 var Dbpool *pgxpool.Pool
-var defaultPostgresConn = "postgres://postgres:postgres@localhost:5433/postgres"
+var defaultPostgresConn = "postgres://postgres:postgres@localhost:5433/postgres?pool_max_conns=100"
 var err error
 var Gqlclient *graphql.Client
 

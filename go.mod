@@ -8,6 +8,7 @@ require (
 	github.com/hasura/go-graphql-client v0.2.0
 	github.com/jackc/pgx/v4 v4.10.1
 	github.com/klauspost/compress v1.11.9 // indirect
+	github.com/orcaman/concurrent-map v0.0.0-20210106121528-16402b402231
 	github.com/pkg/errors v0.9.1 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect

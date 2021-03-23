@@ -27,6 +27,19 @@ func main() {
 	}
 	defer db.Dbpool.Close()
 
+	var yconf config.YamlConfig
+	yconf.GetConf(workspaceRoot)
+	config.ConfInit(yconf)
+
+	if yconf.ResetDb {
+		queryDeleteTable := `DROP TABLE swaps; DROP TABLE pairs;`
+		_, err = db.Dbpool.Exec(context.Background(), queryDeleteTable)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Unable to delete tables: %v\n", err)
+		} else {
+			fmt.Println("Successfully deleted tables")
+		}
+	}
 	queryCreateTable := `CREATE TABLE swaps (id VARCHAR(150), pair VARCHAR(50), price FLOAT, amount FLOAT, time TIMESTAMPTZ NOT NULL); SELECT create_hypertable('swaps', 'time');CREATE TABLE pairs (pair VARCHAR(50));`
 	_, err = db.Dbpool.Exec(context.Background(), queryCreateTable)
 	if err != nil {
@@ -34,9 +47,6 @@ func main() {
 	} else {
 		fmt.Println("Successfully created relational table SWAPS")
 	}
-	var yconf config.YamlConfig
-	yconf.GetConf(workspaceRoot)
-	config.ConfInit(yconf)
 
 	syncerGroup := &syncer.SyncerGroup{SyncInterval: yconf.SyncInterval}
 	go syncerGroup.Init()
