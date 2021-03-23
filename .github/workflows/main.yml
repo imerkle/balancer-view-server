@@ -11,4 +11,4 @@ jobs:
           registry: ghcr.io
           #          password: ${{ secrets.GITHUB_TOKEN }}
           password: ${{ secrets.CR_PAT }}
-          image: ${{ GITHUB_REPOSITORY }}
+          image: ${{ env.GITHUB_REPOSITORY }}
