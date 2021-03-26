@@ -10,4 +10,4 @@ chart_config:
     - "1M"
 sync_interval: 60
 batch_days: 100
-reset_db: true
+reset_db: false

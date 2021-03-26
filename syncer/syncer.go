@@ -108,6 +108,7 @@ func (x *SyncerGroup) Init(batchDays int64) {
 		wg.Wait()
 		fmt.Println("All Sync completed")
 		time.Sleep(time.Duration(x.SyncInterval) * time.Second)
+		start = x.TargetedTimestamp
 		x.TargetedTimestamp = time.Now().UTC().Unix()
 	}
 }
