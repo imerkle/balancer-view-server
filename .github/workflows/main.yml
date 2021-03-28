@@ -4,11 +4,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Set outputs
-        id: vars
-        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-      - name: Check outputs
-        run: echo ${{ steps.vars.outputs.sha_short }}
       - uses: actions/checkout@master
       - name: Kaniko build
         uses: aevea/action-kaniko@master
@@ -16,4 +11,4 @@ jobs:
           registry: ghcr.io
           password: ${{ secrets.CR_PAT }}
           image: ${{ github.repository }}
-          tag: ${{ steps.vars.outputs.sha_short }}
+          tag: ${{ github.sha }}
