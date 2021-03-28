@@ -1,13 +1,16 @@
 chart_config:
   supported_resolutions:
     - "1"
+    - "3"
     - "5"
     - "15"
     - "30"
     - "60"
+    - "240"
+    - "480"
     - "1D"
     - "1W"
     - "1M"
-sync_interval: 60
+sync_interval: 18000
 batch_days: 100
 reset_db: false
