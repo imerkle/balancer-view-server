@@ -18,9 +18,9 @@ jobs:
           path: balancer-view
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-      - name: YQ
       - uses: mikefarah/yq@v4.6.3
-      - run: |
+      - name: YQ
+        run: |
           yq --version
           yq w k8s/app.yaml 'spec.template.spec.containers[0].image' ${{ github.repository }}:${{ github.sha }} > k8s/accounts_tmp.yaml
           mv k8s/app.yaml k8s/app.yaml
