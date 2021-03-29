@@ -16,6 +16,8 @@ jobs:
           password: ${{ secrets.CR_PAT }}
           image: ${{ github.repository }}
           tag: ${{ github.sha }}
+          cache: true
+          cache_registry: cache
   gitops:
     needs: docker-build
     runs-on: ubuntu-latest
@@ -36,7 +38,8 @@ jobs:
           filepath: ${{ env.repo }}/k8s/${{ env.yaml }}
 
       - name: Commit & Push changes
-        uses: actions-js/push@master
+        uses: ad-m/github-push-action@master
         with:
           directory: ${{ env.repo }}
+          repository: ${{ env.repo }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
