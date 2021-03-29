@@ -11,17 +11,19 @@ jobs:
           password: ${{ secrets.CR_PAT }}
           image: ${{ github.repository }}
           tag: ${{ github.sha }}
-      - name: Pull
-      - uses: actions/checkout@master
+      - name: pull repo
+        uses: actions/checkout@master
         with:
           repository: imerkle/balancer-view
           path: balancer-view
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-      - uses: chrisdickinson/setup-yq@latest
-      - name: Show folks how to run YQ
+      - uses: mikefarah/yq@v4.6.3
+      - name: Get yq
         run: |
-          yq --help
+          yq --version
+          yq w k8s/app.yaml 'spec.template.spec.containers[0].image' ${{ github.repository }}:${{ github.sha }} > k8s/accounts_tmp.yaml
+          mv k8s/app.yaml k8s/app.yaml
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
