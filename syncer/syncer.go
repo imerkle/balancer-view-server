@@ -97,6 +97,8 @@ func (x *SyncerGroup) Init(batchDays int64) {
 		var wg sync.WaitGroup
 		end := start + x.BatchSeconds
 		totalBatches := 0
+		fmt.Println("Sync started from")
+		fmt.Println(start)
 		for start < x.TargetedTimestamp {
 			totalBatches++
 			wg.Add(1)
@@ -168,7 +170,7 @@ func (x *Syncer) Init(swapTimestamp int64, targetedTimestamp int64) {
 
 func (x *Syncer) Start() {
 	err := x.FetchSwaps()
-	fmt.Println("Starting for ID: ", x.ID, x.NumInserts)
+	//fmt.Println("Starting for ID: ", x.ID, x.NumInserts)
 	if err != nil {
 		time.Sleep(5 * time.Second)
 		fmt.Println(err)
