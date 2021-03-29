@@ -41,5 +41,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           directory: ${{ env.repo }}
-          repository: ${{ env.repo }}
+          repository: ${{ github.repository_owner }}/${{ env.repo }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
