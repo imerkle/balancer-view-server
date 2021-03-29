@@ -42,4 +42,4 @@ jobs:
         with:
           directory: ${{ env.repo }}
           repository: ${{ github.repository_owner }}/${{ env.repo }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.CR_PAT }}
