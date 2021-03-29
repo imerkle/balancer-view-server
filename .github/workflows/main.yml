@@ -11,6 +11,9 @@ jobs:
           password: ${{ secrets.CR_PAT }}
           image: ${{ github.repository }}
           tag: ${{ github.sha }}
+  gitops:
+    runs-on: ubuntu-latest
+    steps:
       - name: pull repo
         uses: actions/checkout@master
         with:
