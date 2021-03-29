@@ -2,7 +2,6 @@ name: Docker build and gitops
 on: push
 
 env:
-  org: imerkle
   repo: balancer-view
   yaml: app.yaml
 jobs:
@@ -24,7 +23,7 @@ jobs:
       - name: pull repo
         uses: actions/checkout@master
         with:
-          repository: ${{ env.org }}
+          repository: ${{ github.repository_owner }}/${{ env.repo }}
           path: ${{ env.repo }}
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
