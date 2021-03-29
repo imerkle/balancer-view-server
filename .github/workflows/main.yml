@@ -18,12 +18,13 @@ jobs:
           path: balancer-view
           persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
           fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-      - name: Create yqa
-        uses: mikefarah/yq@v4.6.3
-        run: |
-          yq --version
-          yq w k8s/app.yaml 'spec.template.spec.containers[0].image' ${{ github.repository }}:${{ github.sha }} > k8s/accounts_tmp.yaml
-          mv k8s/app.yaml k8s/app.yaml
+      - name: Update image tag for container nginx in deployment.yaml
+        uses: loveholidays/gitops-action-yaml-updater@v1.0
+        with:
+          mode: IMAGE_TAG
+          container-name: go-server
+          new-image-tag: ${{ github.sha }}
+          filepath: k8s/app.yaml
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
