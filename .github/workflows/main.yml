@@ -38,7 +38,7 @@ jobs:
           filepath: ${{ env.repo }}/k8s/${{ env.yaml }}
 
       - name: Commit & Push changes
-        uses: ad-m/github-push-action@master
+        uses: actions/checkout@master
         with:
           directory: ${{ env.repo }}
           repository: ${{ github.repository_owner }}/${{ env.repo }}
