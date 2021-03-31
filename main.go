@@ -31,6 +31,10 @@ func main() {
 	yconf.GetConf(workspaceRoot)
 	config.ConfInit(yconf)
 
+	yconf.SyncInterval = utils.GetEnvAsInt("SYNC_INTERVAL", yconf.SyncInterval)
+	yconf.BatchDays = utils.GetEnvAsInt("BATCH_DAYS", yconf.BatchDays)
+	yconf.ResetDb = utils.GetEnvAsBool("RESET_DB", yconf.ResetDb)
+
 	if yconf.ResetDb {
 		queryDeleteTable := `DROP TABLE swaps; DROP TABLE pairs;`
 		_, err = db.Dbpool.Exec(context.Background(), queryDeleteTable)
