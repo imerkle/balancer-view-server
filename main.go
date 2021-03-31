@@ -80,6 +80,7 @@ func main() {
 		port = args[0]
 	}
 	log.Println("Balancer View data feed server started at port ", port)
+	log.Println("Sync Interval: ", yconf.SyncInterval)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
