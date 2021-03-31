@@ -3,7 +3,8 @@ on: push
 
 env:
   repo: balancer-view
-  yaml: app.yaml
+  yaml: ui.yaml
+  container_name: ui
 jobs:
   docker-build:
     runs-on: ubuntu-latest
