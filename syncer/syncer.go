@@ -94,7 +94,7 @@ func (x *SyncerGroup) Init(batchDays int64) {
 	SetupPairs()
 
 	go func() {
-		for range time.Tick(time.Duration(int64(time.Second) * x.SyncInterval)) {
+		for range time.Tick(time.Duration(x.SyncInterval) * time.Second) {
 			//start parallel syncers
 			var wg sync.WaitGroup
 			end := start + x.BatchSeconds
