@@ -45,5 +45,3 @@ reset_db: false #true = reset db during start, enable for dev only
 - Create materialized views of candlesticks for high liquidity pairs (not required as of now as there aren't many swaps which server can't handle to serve on spot)
 
 - generated automated `usdc` pairs for pairs that dont have `usdc` quote for easier pricing
-
-- fix some issues with `pgxpool` when using very low `batch_days`

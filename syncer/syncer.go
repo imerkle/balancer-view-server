@@ -19,7 +19,7 @@ import (
 var Symbols []config.Symbol // Supported symbols
 
 func InitSymbols() {
-	log.Println("Updaing symbols")
+	log.Println("Updating symbols")
 	for _, k := range PairsMap.Keys() {
 		s := config.NewSymbol(
 			k,
@@ -288,6 +288,7 @@ func (x *Syncer) InsertBatch() error {
 			return err
 		}
 	}
+	defer br.Close()
 	fmt.Println("Insterted " + strconv.Itoa(x.NumInserts) + " swaps till " + time.Unix(x.SwapTimestamp, 0).String() + " ")
 	return nil
 }

@@ -25,7 +25,6 @@ func main() {
 		os.Exit(1)
 	}
 	defer db.Dbpool.Close()
-
 	var yconf config.YamlConfig
 	yconf.GetConf(workspaceRoot)
 	config.ConfInit(yconf)
