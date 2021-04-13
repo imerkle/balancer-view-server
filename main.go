@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -10,9 +12,6 @@ import (
 	"balancer-view/db"
 	"balancer-view/syncer"
 	"balancer-view/utils"
-
-	"log"
-	"net/http"
 )
 
 var workspaceRoot = utils.GetEnv("WORKSPACE_ROOT", "")
@@ -59,8 +58,8 @@ func main() {
 	registerHanders(map[string]func(http.ResponseWriter, *http.Request){
 		"/": func(w http.ResponseWriter, r *http.Request) {
 			respondJSON(w, `Datafeed version is 2.0.4
-			Valid keys count is 5
-			Current key is zy1`, ok200)
+				Valid keys count is 5
+				Current key is zy1`, ok200)
 		},
 		"/config": func(w http.ResponseWriter, r *http.Request) {
 			respondJSON(w, config.Conf, ok200)

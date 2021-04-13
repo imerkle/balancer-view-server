@@ -14,7 +14,6 @@ import (
 	"github.com/hasura/go-graphql-client"
 	"github.com/jackc/pgx/v4"
 	cmap "github.com/orcaman/concurrent-map"
-	"github.com/robfig/cron/v3"
 )
 
 var Symbols []config.Symbol // Supported symbols
@@ -93,36 +92,29 @@ func (x *SyncerGroup) Init(batchDays int64) {
 
 	//setup pairs
 	SetupPairs()
-	job := cron.New()
-	job.AddFunc("@every 5m", func() {
-		//start parallel syncers
-		var wg sync.WaitGroup
-		end := start + x.BatchSeconds
-		totalBatches := 0
-		fmt.Println("Sync started from")
-		fmt.Println(start)
-		for start < x.TargetedTimestamp {
-			totalBatches++
-			wg.Add(1)
-			go x.startSync(totalBatches, &wg, start, end)
-			start = end
-			end = start + x.BatchSeconds
-		}
-		fmt.Println("Total Batches " + strconv.Itoa(totalBatches))
-		wg.Wait()
-		fmt.Println("All Sync completed")
-		start = x.TargetedTimestamp
-		x.TargetedTimestamp = time.Now().UTC().Unix()
 
-	})
-	job.Start()
-
-	/*
-		for {
-			time.Sleep(time.Duration(x.SyncInterval) * time.Second)
+	go func() {
+		for range time.Tick(time.Duration(int64(time.Second) * x.SyncInterval)) {
+			//start parallel syncers
+			var wg sync.WaitGroup
+			end := start + x.BatchSeconds
+			totalBatches := 0
+			fmt.Println("Sync started from")
+			fmt.Println(start)
+			for start < x.TargetedTimestamp {
+				totalBatches++
+				wg.Add(1)
+				go x.startSync(totalBatches, &wg, start, end)
+				start = end
+				end = start + x.BatchSeconds
+			}
+			fmt.Println("Total Batches " + strconv.Itoa(totalBatches))
+			wg.Wait()
+			fmt.Println("All Sync completed")
 			start = x.TargetedTimestamp
 			x.TargetedTimestamp = time.Now().UTC().Unix()
-		}*/
+		}
+	}()
 }
 func SetupPairs() {
 	rows2, err := db.Dbpool.Query(context.Background(), `select pair from pairs`)
