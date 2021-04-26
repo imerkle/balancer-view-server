@@ -50,8 +50,10 @@ func main() {
 		fmt.Println("Successfully created relational table SWAPS")
 	}
 
-	syncerGroup := &syncer.SyncerGroup{SyncInterval: yconf.SyncInterval}
-	go syncerGroup.Init(yconf.BatchDays)
+	for _, e := range yconf.Endpoints {
+		syncerGroup := &syncer.SyncerGroup{SyncInterval: yconf.SyncInterval, Endpoint: e}
+		go syncerGroup.Init(yconf.BatchDays)
+	}
 
 	// Register http handlers
 	registerHanders(map[string]func(http.ResponseWriter, *http.Request){

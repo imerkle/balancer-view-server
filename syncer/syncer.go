@@ -37,6 +37,7 @@ type Syncer struct {
 	FirstSwaps        int
 	Batch             *pgx.Batch
 	query             SwapQuery
+	gql               *graphql.Client
 }
 
 //Syncer syncs swaps from graphql indexer to timeseries
@@ -45,20 +46,20 @@ type SyncerGroup struct {
 	TargetedTimestamp int64
 	BatchSeconds      int64
 	SyncInterval      int64
+	gqlclient         *graphql.Client
+	Endpoint          string
 }
 
 var (
 	PairsMap    = cmap.New()
-	MajorQuotes = map[string]bool{"USDC": true, "WETH": true}
+	MajorQuotes = []string{"USDC", "WETH", "BAL"}
 )
 
 func (x *SyncerGroup) Init(batchDays int64) {
+
 	x.BatchSeconds = 60 * 60 * 24 * batchDays //1 week
 	//x.TargetedTimestamp = 1591979848
 	x.TargetedTimestamp = time.Now().UTC().Unix()
-
-	//setup clients
-	db.InitGQL()
 
 	//get last timestamp to reume syncing from
 	var start int64 = 0
@@ -76,20 +77,20 @@ func (x *SyncerGroup) Init(batchDays int64) {
 	}
 	defer rows.Close()
 
+	gql := graphql.NewClient(x.Endpoint, nil)
 	//first time so get starting timestamp to start syncing
 	if start == 0 {
 		type SQF struct {
 			Swap []Swap `graphql:"swaps(first:1, orderBy: timestamp)"`
 		}
 		var query SQF
-		err = db.Gqlclient.Query(context.Background(), &query, nil)
+		err = gql.Query(context.Background(), &query, nil)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error fetching first swap: %v\n", err)
 			os.Exit(1)
 		}
 		start = int64(query.Swap[0].Timestamp)
 	}
-
 	//setup pairs
 	SetupPairs()
 
@@ -99,12 +100,11 @@ func (x *SyncerGroup) Init(batchDays int64) {
 			var wg sync.WaitGroup
 			end := start + x.BatchSeconds
 			totalBatches := 0
-			fmt.Println("Sync started from")
-			fmt.Println(start)
+			fmt.Println("Sync started from ", start, x.Endpoint)
 			for start < x.TargetedTimestamp {
 				totalBatches++
 				wg.Add(1)
-				go x.startSync(totalBatches, &wg, start, end)
+				go x.startSync(totalBatches, &wg, start, end, gql)
 				start = end
 				end = start + x.BatchSeconds
 			}
@@ -136,9 +136,9 @@ func SetupPairs() {
 	InitSymbols()
 	defer rows2.Close()
 }
-func (x *SyncerGroup) startSync(id int, wg *sync.WaitGroup, start int64, end int64) {
+func (x *SyncerGroup) startSync(id int, wg *sync.WaitGroup, start int64, end int64, gql *graphql.Client) {
 	syncer := &Syncer{ID: id}
-	syncer.Init(start, end)
+	syncer.Init(start, end, gql)
 	syncer.Start()
 	wg.Done()
 }
@@ -161,13 +161,13 @@ func (x *Syncer) CreateMaterializedView(pair string) {
 }*/
 
 //Init initializes Syncer
-func (x *Syncer) Init(swapTimestamp int64, targetedTimestamp int64) {
+func (x *Syncer) Init(swapTimestamp int64, targetedTimestamp int64, gql *graphql.Client) {
 	x.SwapTimestamp = swapTimestamp
 	x.NumInserts = 0
 	x.FirstSwaps = 1000
 	x.Batch = &pgx.Batch{}
 	x.TargetedTimestamp = targetedTimestamp
-	db.Gqlclient = graphql.NewClient("https://api.thegraph.com/subgraphs/name/balancer-labs/balancer", nil)
+	x.gql = gql
 }
 
 func (x *Syncer) Start() {
@@ -204,12 +204,21 @@ func (x *Syncer) FetchSwaps() error {
 		"first_swaps":    graphql.Int(x.FirstSwaps),
 		"swap_timestamp": graphql.Int(x.SwapTimestamp),
 	}
-	err := db.Gqlclient.Query(context.Background(), &x.query, variables)
+	err := x.gql.Query(context.Background(), &x.query, variables)
 	return err
 }
 
 var queryInsertTimeseriesData = `INSERT INTO swaps (id, pair, price, amount, time) VALUES ($1, $2, $3, $4, $5);`
 var queryInsertPair = `INSERT INTO pairs (pair) VALUES ($1);`
+
+func contains(list []string, s string) bool {
+	for _, e := range list {
+		if e == "s" {
+			return true
+		}
+	}
+	return false
+}
 
 //CreateBatch creates batch from fetched swaps for insertion
 func (x *Syncer) CreateBatch() int {
@@ -235,7 +244,7 @@ func (x *Syncer) CreateBatch() int {
 						pair = WETHLINK
 						pairrev = LINKWETH
 					*/
-					if _, ok := MajorQuotes[string(swap.TokenInSym)]; ok {
+					if ok := contains(MajorQuotes, string(swap.TokenInSym)); ok {
 						pair = pairRev
 						isRev = true
 					}

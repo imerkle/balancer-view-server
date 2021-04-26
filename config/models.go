@@ -28,5 +28,6 @@ type YamlConfig struct {
 	// 1 day = 1 goroutine per day interval
 	BatchDays int64 `yaml:"batch_days"`
 	// Reset db on start, enable only for dev purposes
-	ResetDb bool `yaml:"reset_db"`
+	ResetDb   bool     `yaml:"reset_db"`
+	Endpoints []string `yaml:"endpoints"`
 }

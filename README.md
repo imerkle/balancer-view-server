@@ -38,10 +38,28 @@ chart_config:
 sync_interval: 60 #sync new swaps every second
 batch_days: 100 #days for each batch during initial syncing . less days = more parallel workers
 reset_db: false #true = reset db during start, enable for dev only
+endpoints:
+  - "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer"
+  - "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2"
 ```
 
-### improvements
 
-- Create materialized views of candlesticks for high liquidity pairs (not required as of now as there aren't many swaps which server can't handle to serve on spot)
+### Changelog
 
-- generated automated `usdc` pairs for pairs that dont have `usdc` quote for easier pricing
+- Ordered list quote instead of maps 
+- Supports syncing multiple endpoints
+
+### Roadmap
+
+*just some ideas nothing set in stone*
+
+- Better logs [I1]
+- Materialized views of candlesticks for high liquidity pairs [I1]
+- Integerate chart with exchange interface [F1]
+- Automatically generate custom Fiat pairs for every tokens [F2]
+- Custom price alerts to discord, slack etc [F3]
+- Screener [F3]
+
+*F- Feature*
+*I- Internal*
+*expect F1 to come sooner than F3*

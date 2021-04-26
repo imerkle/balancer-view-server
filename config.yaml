@@ -18,3 +18,6 @@ chart_config:
 sync_interval: 1800
 batch_days: 25
 reset_db: false
+endpoints:
+  - "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer"
+  - "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2"
